@@ -1,8 +1,7 @@
 # Azure Snapshot Copy
 A script to copy azure snapshots to a specified region and automatically delete them upon expiration.
 
-## Background
-
+You can run this tools in cronjob to copy snapshots to specified region periodically 
 
 ## Run
 ```bash
