@@ -1,4 +1,4 @@
-# Azure Snapshots Copy (Kubernetes CronJob)
+# Azure Snapshots Copy (CronJob Script)
 A script to copy azure snapshots to a specified region and automatically delete them upon expiration.
 
 You can run this tools in cronjob to copy snapshots to specified region periodically

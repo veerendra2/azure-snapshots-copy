@@ -1,4 +1,18 @@
 ---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-snapshots-copy-script-credentails
+  namespace: velero
+type: Opaque
+data:
+  AZURE_SUBSCRIPTION_ID: RFVNTVk=
+  AZURE_RESOURCE_GROUP: RFVNTVk=
+  AZURE_CLIENT_ID: RFVNTVk=
+  CLIENT_SECRET: RFVNTVk=
+  AZURE_TENANT_ID: RFVNTVk=
+
+---
 apiVersion: batch/v1
 kind: CronJob
 metadata:
@@ -25,27 +39,27 @@ spec:
                   valueFrom:
                     secretKeyRef:
                       key: AZURE_RESOURCE_GROUP
-                      name: snapshots-manager-script-credentails
+                      name: azure-snapshots-copy-script-credentails
                 - name: SUBSCRIPTION_ID
                   valueFrom:
                     secretKeyRef:
                       key: AZURE_SUBSCRIPTION_ID
-                      name: snapshots-manager-script-credentails
+                      name: azure-snapshots-copy-script-credentails
                 - name: CLIENT_ID
                   valueFrom:
                     secretKeyRef:
                       key: AZURE_CLIENT_ID
-                      name: snapshots-manager-script-credentails
+                      name: azure-snapshots-copy-script-credentails
                 - name: CLIENT_SECRET
                   valueFrom:
                     secretKeyRef:
                       key: AZURE_CLIENT_SECRET
-                      name: snapshots-manager-script-credentails
+                      name: azure-snapshots-copy-script-credentails
                 - name: TENANT_ID
                   valueFrom:
                     secretKeyRef:
                       key: AZURE_TENANT_ID
-                      name: snapshots-manager-script-credentails
+                      name: azure-snapshots-copy-script-credentails
               command:
                 - /bin/sh
                 - -ce
