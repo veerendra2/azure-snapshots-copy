@@ -1,5 +1,5 @@
 FROM python:3.11-alpine
 
-COPY src/ src/
-
-RUN pip3 install -r /requirements.txt
+WORKDIR /app
+COPY . /app/
+RUN pip3 install -r /app/requirements.txt

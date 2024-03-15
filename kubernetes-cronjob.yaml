@@ -2,11 +2,8 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: snapshots-manager
+  name: azure-snapshots-copy
   namespace: velero
-  labels:
-    app: velero
-    kustomize.toolkit.fluxcd.io/substitute: disabled
 spec:
   schedule: "* 6 * * *"
   concurrencyPolicy: Forbid
@@ -15,20 +12,13 @@ spec:
   jobTemplate:
     spec:
       backoffLimit: 0
-      template:
-        metadata:
-          labels:
-            app: velero
-            istio-prometheus-ignore: "true"
         spec:
-          imagePullSecrets:
-            - name: staffbase-artifactory
           containers:
-            - name: python-container
+            - name: app
               image: veerendra2/azure-snapshot-copy:0.1
               env:
                 - name: RESOURCE_GROUP
-                  value: prod-de1-nodepool
+                  value: my-nodepool
                 - name: DESTINATION_REGION
                   value: "Germany North"
                 - name: DESTINATION_RESOURCE_GROUP
@@ -59,7 +49,7 @@ spec:
               command:
                 - /bin/sh
                 - -ce
-                - python3 /mnt/snapshots-manager.py
+                - python3 /app/src/azure-snapshots-copy.py
               imagePullPolicy: IfNotPresent
               securityContext:
                 allowPrivilegeEscalation: false

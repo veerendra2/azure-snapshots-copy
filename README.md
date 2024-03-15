@@ -1,7 +1,7 @@
-# Azure Snapshot Copy
+# Azure Snapshots Copy (Kubernetes CronJob)
 A script to copy azure snapshots to a specified region and automatically delete them upon expiration.
 
-You can run this tools in cronjob to copy snapshots to specified region periodically 
+You can run this tools in cronjob to copy snapshots to specified region periodically
 
 ## Run
 ```bash
@@ -17,8 +17,8 @@ $ export DESTINATION_RESOURCE_GROUP=rg-test
 $ az login
 
 # for help
-$ path/to/venv/bin/python3 snapshot-manage.py -h
-usage: snapshot-manage.py [-h] [-s SUBSCRIPTION_ID] [-g RESOURCE_GROUP] [-d DESTINATION_RESOURCE_GROUP] [-r DESTINATION_REGION] [-c CLIENT_ID] [-e CLIENT_SECRET] [-t TENANT_ID] [-i]
+$ python3 azure-snapshots-copy.py -h
+usage: azure-snapshots-copy.py [-h] [-s SUBSCRIPTION_ID] [-g RESOURCE_GROUP] [-d DESTINATION_RESOURCE_GROUP] [-r DESTINATION_REGION] [-c CLIENT_ID] [-e CLIENT_SECRET] [-t TENANT_ID] [-i]
                          [-x EXPIRE_DAYS] [-p SNAPSHOT_NAME_PREFIX]
 
 Azure Snapshot Manager
@@ -47,7 +47,7 @@ options:
                        Prefix name for newly copied snasphots (default: copy-)
 
 # once all environmental vars are set
-$ ./snapshot-manage.py
+$ ./azure-snapshots-copy.py
 ```
 
 ## How it works?
