@@ -29,7 +29,7 @@ spec:
         spec:
           containers:
             - name: app
-              image: veerendra2/azure-snapshot-copy:0.1
+              image: ghcr.io/veerendra2/azure-snapshots-copy/azure-snapshot-copy:v0.1
               env:
                 - name: RESOURCE_GROUP
                   value: my-nodepool
