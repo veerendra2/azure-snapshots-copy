@@ -1,0 +1,91 @@
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-snapshots-copy-script-credentails
+  namespace: velero
+type: Opaque
+data:
+  AZURE_SUBSCRIPTION_ID: RFVNTVk=
+  AZURE_RESOURCE_GROUP: RFVNTVk=
+  AZURE_CLIENT_ID: RFVNTVk=
+  CLIENT_SECRET: RFVNTVk=
+  AZURE_TENANT_ID: RFVNTVk=
+
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: azure-snapshots-copy
+  namespace: velero
+spec:
+  schedule: "* 6 * * *"
+  concurrencyPolicy: Forbid
+  successfulJobsHistoryLimit: 1
+  failedJobsHistoryLimit: 1
+  jobTemplate:
+    spec:
+      backoffLimit: 0
+        spec:
+          containers:
+            - name: app
+              image: ghcr.io/veerendra2/azure-snapshots-copy/azure-snapshot-copy:v0.1
+              env:
+                - name: RESOURCE_GROUP
+                  value: my-nodepool
+                - name: DESTINATION_REGION
+                  value: "Germany North"
+                - name: DESTINATION_RESOURCE_GROUP
+                  valueFrom:
+                    secretKeyRef:
+                      key: AZURE_RESOURCE_GROUP
+                      name: azure-snapshots-copy-script-credentails
+                - name: SUBSCRIPTION_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: AZURE_SUBSCRIPTION_ID
+                      name: azure-snapshots-copy-script-credentails
+                - name: CLIENT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: AZURE_CLIENT_ID
+                      name: azure-snapshots-copy-script-credentails
+                - name: CLIENT_SECRET
+                  valueFrom:
+                    secretKeyRef:
+                      key: AZURE_CLIENT_SECRET
+                      name: azure-snapshots-copy-script-credentails
+                - name: TENANT_ID
+                  valueFrom:
+                    secretKeyRef:
+                      key: AZURE_TENANT_ID
+                      name: azure-snapshots-copy-script-credentails
+              command:
+                - /bin/sh
+                - -ce
+                - python3 /app/src/azure-snapshots-copy.py
+              imagePullPolicy: IfNotPresent
+              securityContext:
+                allowPrivilegeEscalation: false
+                capabilities:
+                  drop: [ALL]
+                privileged: false
+                readOnlyRootFilesystem: true
+                runAsNonRoot: true
+                seccompProfile:
+                  type: RuntimeDefault
+              terminationMessagePath: /dev/termination-log
+              terminationMessagePolicy: File
+              resources:
+                requests:
+                  memory: "100Mi"
+                  cpu: "50m"
+                limits:
+                  memory: "100Mi"
+          dnsPolicy: ClusterFirst
+          restartPolicy: Never
+          terminationGracePeriodSeconds: 30
+          securityContext:
+            runAsUser: 1001
+            runAsGroup: 1001
+            fsGroup: 1001
