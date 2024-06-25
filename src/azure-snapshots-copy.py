@@ -8,20 +8,13 @@ import argparse
 import logging
 import os
 import sys
-from datetime import UTC, datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta
 
 from azure.identity import ClientSecretCredential, DefaultAzureCredential
 from azure.mgmt.compute import ComputeManagementClient
+from loguru import logger
 
 __author__ = "veerendra2"
-
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-    datefmt="%Y-%m-%d %H:%M:%S",
-)
-logger = logging.getLogger(__name__)
-logging.getLogger("azure").setLevel(logging.CRITICAL)
 
 
 class EnvDefault(argparse.Action):
